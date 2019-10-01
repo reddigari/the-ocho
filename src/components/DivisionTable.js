@@ -18,7 +18,7 @@ function TeamRow(props) {
 
 function DivisionTable(props) {
 
-    const COLORS = ["lightblue", "lightgreen"];
+    const COLORS = ["lightblue", "lightgreen", "lightpink", "papayawhip"];
 
     var teams = props.teams;
     teams.forEach(t => {
