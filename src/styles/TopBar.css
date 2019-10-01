@@ -1,0 +1,12 @@
+.league-title {
+    display: inline-block;
+}
+.league-id {
+    font-weight: lighter;
+    color: grey;
+}
+.change-league {
+    vertical-align: top;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}

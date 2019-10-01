@@ -1,0 +1,17 @@
+body {
+    font-size: 10pt;
+}
+h2 {
+    font-weight: lighter;
+    font-size: 1.5rem;
+}
+.row {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.viz-item {
+    padding: 0.25rem;
+    height: 100%;
+    border: 1px solid lightgrey;
+    box-shadow: 2px 2px 2px lightgrey;
+}
