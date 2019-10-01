@@ -16,12 +16,6 @@ function fetchData(leagueId) {
         .catch(err => console.log(err));
 }
 
-function getLeagueIdFromURL() {
-    const query = window.location.search;
-    const params = new URLSearchParams(query);
-    return params.get("leagueId");
-}
-
 class App extends Component {
 
     constructor() {
@@ -34,11 +28,6 @@ class App extends Component {
         this.handleTeamSelection = this.handleTeamSelection.bind(this);
         this.handleLeagueChange = this.handleLeagueChange.bind(this);
     }
-
-    //componentDidMount() {
-        //const id = getLeagueIdFromURL();
-        //this.handleLeagueChange(id);
-    //}
 
     handleLeagueChange(leagueId) {
         fetchData(leagueId).then(resp => {
@@ -101,7 +90,7 @@ class App extends Component {
                                        selectedTeam={this.state.teamId} w={500} h={350} />                    
                         </Col>
                         <Col md={6}>
-                            <TeamBarChart data={this.state.teams}
+                            <TeamBarChart data={this.state.teams.sort((a, b) => b.pointsFor - a.pointsFor)}
                                        units="Fantasy Points"
                                        selectedTeam={this.state.teamId} w={500} h={350} />                    
                         </Col>

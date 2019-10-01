@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, FormGroup, FormControl } from 'react-bootstrap';
+import { Button, Modal, FormControl } from 'react-bootstrap';
 import '../styles/TopBar.css';
 
 

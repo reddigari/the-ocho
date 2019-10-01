@@ -37,8 +37,7 @@ class TeamBarChart extends Component {
 
     updateChart() {
         if (!this.props.data) return;
-        var {w, h, data} = this.props,
-        data = data.sort((a, b) => b.pointsFor - a.pointsFor),
+        const {w, h, data} = this.props,
         margin = {
             left: w * 0.08,
             right: w * 0.20,
