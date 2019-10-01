@@ -98,7 +98,8 @@ class App extends Component {
                 </div>
             )
         }
-        else return ( <LeagueInput show={true} changeLeague={this.handleLeagueChange} /> );
+        else return ( <LeagueInput show={true} changeLeague={this.handleLeagueChange}
+                       allowCancel={false} /> );
     }
 
 }

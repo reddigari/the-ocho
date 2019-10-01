@@ -10,3 +10,12 @@
     margin-left: 0.5rem;
     cursor: pointer;
 }
+.league-option {
+    display: block;
+    font-size: 1rem;
+}
+.league-option-title {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
