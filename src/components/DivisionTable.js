@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/DivisionTable.css';
+import { LuckIndexHelp } from './HelpModal.js';
 
 function TeamRow(props) {
     const t = props.team;
@@ -12,6 +13,7 @@ function TeamRow(props) {
             <td>{t.pointsWins}</td>
             <td>{t.pointsFor.toFixed(1)}</td>
             <td>{t.pointsAgainst.toFixed(1)}</td>
+            <td>{(t.wins - t.expectedWins).toFixed(2)}</td>
         </tr>
     )
 }
@@ -54,6 +56,7 @@ function StandingsTable(props) {
                         <th>Points Wins</th>
                         <th>Points For</th>
                         <th>Points Against</th>
+                        <th>Luck Index <LuckIndexHelp /></th>
                     </tr>
                 </thead>
                 {props.divisions.map((d, i) => 

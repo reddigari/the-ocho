@@ -12,6 +12,7 @@ class DataParser {
             week.forEach(d => {
                 this.teams[teamIdx[d.teamId]].pointsWins += d.points_win ? 1 : 0;
                 this.teams[teamIdx[d.teamId]].pointsLosses += d.points_win ? 0 : 1;
+                this.teams[teamIdx[d.teamId]].expectedWins += d.expectedWins;
                 this.teams[teamIdx[d.teamId]].scores.push(d.points);
             });
         });
@@ -31,6 +32,7 @@ class DataParser {
         team.pointsAgainst = data.record.overall.pointsAgainst;
         team.pointsWins = 0;
         team.pointsLosses = 0;
+        team.expectedWins = 0;
         team.scores = [];
         return team;
     }
@@ -39,9 +41,11 @@ class DataParser {
         const matchup = {};
         matchup.matchupPeriodId = data.matchupPeriodId;
         matchup.homeTeamId = data.home.teamId;
-        matchup.awayTeamId = data.away.teamId;
         matchup.homePoints = data.home.totalPoints;
-        matchup.awayPoints = data.away.totalPoints;
+        if (data.away) {
+            matchup.awayTeamId = data.away.teamId;
+            matchup.awayPoints = data.away.totalPoints;
+        }
         matchup.winner = data.winner;
         matchup.winnerId = data.winner === "HOME" ? matchup.homeTeamId : matchup.awayTeamId
         if (data.winner === "TIE") matchup.winnerId = 0;
@@ -69,13 +73,17 @@ class DataParser {
         const finishedIds = [];
         allIds.forEach(i => finishedIds.push(i));
         const teamScores = finishedIds.map(id => this.getScoresByMatchup(finished, id));
-        teamScores.forEach(scores => {
-            const cutoff = this.cutoffFromScores(scores);
-            scores.forEach(s => {
+        const out = teamScores.map(scores => {
+            const cutoff = this.cutoffFromScores(scores),
+                  sorted = scores.sort((a, b) => a.points - b.points),
+                  N = scores.length - 1;
+            sorted.forEach((s, i) => {
+                s.expectedWins = i / N;
                 s.points_win = s.points >= cutoff;
             });
+            return sorted;
         });
-        return teamScores;
+        return out;
     }
 
 
