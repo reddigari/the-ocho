@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import '../styles/App.css';
 import DataParser from '../parse-data.js';
-import DATA_URL from '../constants.js';
+import { DATA_URL } from '../constants.js';
 import StandingsTable from './DivisionTable.js';
 import Histogram from './Histogram.js';
 import TeamBarChart from './TeamBarChart.js';
