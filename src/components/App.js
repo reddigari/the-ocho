@@ -5,9 +5,9 @@ import DATA_URL from '../constants.js';
 import StandingsTable from './DivisionTable.js';
 import Histogram from './Histogram.js';
 import TeamBarChart from './TeamBarChart.js';
+import SettingsMenu from './SettingsMenu.js';
 import { TopBar, LeagueInput } from './TopBar.js';
-import ErrorMessage from './ErrorMessage.js';
-import { Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 
 function fetchData(leagueId) {
@@ -21,9 +21,13 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
+            leagueId: null,
+            leagueSettings: null,
             teams: null,
             divisions: null,
-            teamId: null
+            teamId: null,
+            errorMsg: null,
+            pointsWins: true
         }
         this.handleTeamSelection = this.handleTeamSelection.bind(this);
         this.handleLeagueChange = this.handleLeagueChange.bind(this);
@@ -40,11 +44,13 @@ class App extends Component {
                 leagueId: leagueId,
                 leagueSettings: parser.leagueSettings,
                 teams: parser.teams,
-                divisions: parser.divisions
+                divisions: parser.divisions,
+                errorMsg: null
             });
         })
         .catch(err => {
-            this.setState({errorMsg: "oops"});
+            this.setState({errorMsg: "Failed to load data from that league."});
+            console.log(err);
         });
     }
 
@@ -53,7 +59,7 @@ class App extends Component {
     }
 
     _histogramData() {
-        const data = this.state.teams;   
+        const data = this.state.teams;
         const scores = [];
         data.forEach(d => {
             var items = d.scores.map(s => ({teamId: d.teamId, value: s}));
@@ -65,43 +71,48 @@ class App extends Component {
 
     render() {
         if (this.state.errorMsg) {
-            return (<ErrorMessage message={this.state.errorMsg} />)
+            console.log("rendering with error");
+            return ( <LeagueInput show={true} changeLeague={this.handleLeagueChange}
+                       allowCancel={false} errorMsg={this.state.errorMsg} /> );
         }
-        if (this.state.divisions) {
+        else if (this.state.divisions) {
             return (
-                <div className="container">
-                    <Row>
-                        <Col>
-                            <TopBar league={this.state.leagueSettings}
-                                    leagueId={this.state.leagueId}
-                                    changeLeague={this.handleLeagueChange} />
-                        </Col>
-                    </Row>
-                    <Row className="justify-content-center">
-                        <Col>
-                            <StandingsTable divisions={this.state.divisions} teams={this.state.teams} 
-                                            onRowHover={this.handleTeamSelection} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={6}>
-                            <Histogram data={this._histogramData()}
-                                       units="Fantasy Points"
-                                       selectedTeam={this.state.teamId} w={500} h={350} />                    
-                        </Col>
-                        <Col md={6}>
-                            <TeamBarChart data={this.state.teams.sort((a, b) => b.pointsFor - a.pointsFor)}
-                                       units="Fantasy Points"
-                                       selectedTeam={this.state.teamId} w={500} h={350} />                    
-                        </Col>
-                    </Row>
-                </div>
-            )
+                <Container>
+                        <Row>
+                            <Col>
+                                <TopBar league={this.state.leagueSettings}
+                                        leagueId={this.state.leagueId}
+                                        changeLeague={this.handleLeagueChange} />
+                            </Col>
+                        </Row>
+                        <SettingsMenu pointsWinsCallback={() => this.setState({pointsWins: !this.state.pointsWins})}
+                                      pointsWins={this.state.pointsWins} />
+                        <Row className="justify-content-center">
+                            <Col>
+                                <StandingsTable divisions={this.state.divisions} teams={this.state.teams}
+                                                onRowHover={this.handleTeamSelection}
+                                                pointsWins={this.state.pointsWins} />
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md={6}>
+                                <Histogram data={this._histogramData()}
+                                           units="Fantasy Points"
+                                           selectedTeam={this.state.teamId} w={500} h={350} />
+                            </Col>
+                            <Col md={6}>
+                                <TeamBarChart data={this.state.teams.sort((a, b) => b.pointsFor - a.pointsFor)}
+                                           units="Fantasy Points" pointsWins={this.state.pointsWins}
+                                           selectedTeam={this.state.teamId} w={500} h={350} />
+                            </Col>
+                        </Row>
+                    </Container>
+                )
+            }
+            else return ( <LeagueInput show={true} changeLeague={this.handleLeagueChange}
+                           allowCancel={false} /> );
         }
-        else return ( <LeagueInput show={true} changeLeague={this.handleLeagueChange}
-                       allowCancel={false} /> );
-    }
 
-}
+    }
 
 export default App;

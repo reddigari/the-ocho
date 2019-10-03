@@ -20,7 +20,8 @@ class TeamBarChart extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.data !== this.props.data) {
+        if ((prevProps.data !== this.props.data)
+            || (prevProps.pointsWins !== this.props.pointsWins)) {
             this.updateChart();
         }
         if (prevProps.selectedTeam !== this.props.selectedTeam) {

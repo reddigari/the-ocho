@@ -9,8 +9,12 @@ function TeamRow(props) {
             onMouseOut={() => props.onHover(null)}>
             <td>{t.location} {t.nickname}</td>
             <td>{t.totalWins}-{t.totalLosses}-{t.ties}</td>
-            <td>{t.wins}</td>
-            <td>{t.pointsWins}</td>
+            {props.pointsWins ?
+                (<>
+                    <td>{t.wins}</td>
+                    <td>{t.pointsWins}</td>
+                </>)
+                : null}
             <td>{t.pointsFor.toFixed(1)}</td>
             <td>{t.pointsAgainst.toFixed(1)}</td>
             <td>{(t.wins - t.expectedWins).toFixed(2)}</td>
@@ -23,13 +27,16 @@ function DivisionTable(props) {
     const COLORS = ["lightblue", "lightgreen", "lightpink", "papayawhip"];
 
     var teams = props.teams;
+    const pw = props.pointsWins;
     teams.forEach(t => {
-        t.totalWins = t.wins + t.pointsWins
-        t.totalLosses = t.losses + t.pointsLosses
+        t.totalWins = t.wins + (pw ? t.pointsWins : 0)
+        t.totalLosses = t.losses + (pw ? t.pointsLosses : 0)
     });
     teams = teams.sort((a, b) => b.totalWins - a.totalWins);
 
-    const rows = teams.map((t, i) => <TeamRow team={t} key={t.teamId} onHover={props.onRowHover} />);
+    const rows = teams.map((t, i) =>
+        <TeamRow team={t} key={t.teamId} onHover={props.onRowHover}
+                 pointsWins={pw} />);
     let style = {backgroundColor: COLORS[props.index]};
     return (
         <tbody>
@@ -37,7 +44,7 @@ function DivisionTable(props) {
             <td className="division-name" rowSpan={teams.length + 1}
                 style={style}>{props.name}</td>
             </tr>
-            {rows} 
+            {rows}
         </tbody>
     )
 }
@@ -52,16 +59,21 @@ function StandingsTable(props) {
                         <th>Division</th>
                         <th>Team</th>
                         <th>Record</th>
-                        <th>Game Wins</th>
-                        <th>Points Wins</th>
+                        {props.pointsWins ? (
+                            <>
+                                <th>Game Wins</th>
+                                <th>Points Wins</th>
+                            </>
+                        ) : null}
                         <th>Points For</th>
                         <th>Points Against</th>
                         <th>Luck Index <LuckIndexHelp /></th>
                     </tr>
                 </thead>
-                {props.divisions.map((d, i) => 
+                {props.divisions.map((d, i) =>
                     <DivisionTable key={d.id} teams={props.teams.filter(t => t.divisionId === d.id)}
-                                   name={d.name} index={i} onRowHover={props.onRowHover} />
+                                   name={d.name} index={i} onRowHover={props.onRowHover}
+                                   pointsWins={props.pointsWins} />
                 )}
             </table>
         </div>

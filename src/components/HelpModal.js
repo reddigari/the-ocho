@@ -37,4 +37,13 @@ function LuckIndexHelp(props) {
     return <HelpModal title="Luck Index" text={msg} />
 }
 
-export { LuckIndexHelp };
+function PointsWinsHelp(props) {
+    const msg = [
+        "Choosing ", <b>Points-based Wins</b>, " assigns an additional win to each team scoring in the top half ",
+        "of scores that week, and an additional loss to those scoring in the bottom half.", <br/>, <br/>,
+        "It is designed to reduce the unfairness of very high-scoring losses and very low-scoring wins."
+    ]
+    return <HelpModal title="Points-based Wins" text={msg} />
+}
+
+export { LuckIndexHelp, PointsWinsHelp };
