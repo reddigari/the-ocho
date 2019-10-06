@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import { colors } from '../styles/constants';
 
@@ -13,6 +14,10 @@ class TeamBarChart extends Component {
         this.config.yAxis = d3.axisLeft(this.config.yScale)
             .tickSizeOuter(0)
             .tickSizeInner(0);
+        this.state = {
+            w: null,
+            h: null
+        }
     }
 
     componentDidMount() {
@@ -38,10 +43,13 @@ class TeamBarChart extends Component {
 
     updateChart() {
         if (!this.props.data) return;
-        const {w, h, data} = this.props,
-        margin = {
-            left: w * 0.08,
-            right: w * 0.20,
+        const { data } = this.props;
+        const w = ReactDOM.findDOMNode(this).offsetWidth * 0.9,
+              h = 0.9 * w;
+        this.setState({w: w, h: h});
+        const margin = {
+            left: w * 0.10,
+            right: w * 0.01,
             top: h * 0.02,
             bottom: h * 0.01,
         },
@@ -66,18 +74,18 @@ class TeamBarChart extends Component {
         // point bars
         var bars = chart.selectAll(".points-bar")
             .data(data);
-        bars.exit().remove();
         bars.enter().append("rect")
             .attr("class", "points-bar")
             .merge(bars)
+            .transition().duration(300)
             .attr("y", d => yScale(d.teamId))
             .attr("width", d => xScale(d.pointsFor / maxScore))
             .attr("height", barSpacing * 0.95)
             .attr("fill", colors.barGrey);
         // point labels
+        bars.exit().remove();
         var labels = chart.selectAll(".points-label")
             .data(data);
-        labels.exit().remove();
         labels.enter().append("text")
             .attr("class", "points-label")
             .merge(labels)
@@ -87,10 +95,10 @@ class TeamBarChart extends Component {
             .attr("font-size", barSpacing / 3)
             //.attr("fill", "white")
             .attr("text-anchor", "end");
+        labels.exit().remove();
         // record labels
         var records = chart.selectAll(".record-label")
             .data(data);
-        records.exit().remove();
         records.enter().append("text")
             .attr("class", "record-label")
             .merge(records)
@@ -99,34 +107,13 @@ class TeamBarChart extends Component {
             .attr("y", d => yScale(d.teamId) + (0.6 * yScale.bandwidth()))
             .attr("font-size", barSpacing / 3)
             .attr("font-weight", "bold")
-            //.attr("fill", "white")
             .attr("text-anchor", "start");
-        // ppw labels
-        //const ppwVals = data.map(d => d.pointsFor / d.wins),
-              //ppwExt = d3.extent(ppwVals),
-              //ppwRange = ppwExt[1] - ppwExt[0],
-              //ppwScale = (x) => ((x - ppwExt[0]) / ppwRange);
-        //var ppw = chart.selectAll(".ppw-label")
-            //.data(data);
-        //ppw.exit().remove();
-        //ppw.enter().append("text")
-            //.attr("class", "ppw-label")
-            //.merge(ppw)
-            //.text(function(d) { 
-                //let val = d.pointsFor / d.wins;
-                //return d3.format(".1f")(val) + " pts/W"
-            //})
-            //.attr("x", width + 5)
-            //.attr("y", d => yScale(d.teamId) + (0.6 * yScale.bandwidth()))
-            //.attr("font-size", barSpacing / 3)
-            //.attr("font-weight", "bold")
-            //.attr("fill", d => d3.interpolateRdYlGn(ppwScale(d.pointsFor / d.wins)))
-            //.attr("text-anchor", "start");
+        records.exit().remove();
     }
 
     render() {
         if (!this.props.data) return <div />
-        const {w, h} = this.props;
+        const {w, h} = this.state;
         return (
             <div className="viz-item">
                 <h2>Total Points</h2>

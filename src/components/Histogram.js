@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import { colors } from '../styles/constants.js';
 
@@ -13,6 +14,10 @@ class Histogram extends Component {
         };
         this.config.xAxis = d3.axisBottom(this.config.xScale)
             .tickSizeOuter(0);
+        this.state = {
+            w: null,
+            h: null
+        }
     }
 
 
@@ -55,12 +60,14 @@ class Histogram extends Component {
 
     updateChart() {
         if (!this.props.data) return;
-        const {w, h} = this.props,
-        margin = {
+        const w = ReactDOM.findDOMNode(this).offsetWidth * 0.9,
+              h = 0.8 * w;
+        this.setState({w: w, h: h});
+        const margin = {
             left: w * 0.05,
             right: w * 0.02,
             top: h * 0.02,
-            bottom: h * 0.08,
+            bottom: h * 0.10,
         },
         width = w - margin.left - margin.right,
         height = h - margin.bottom - margin.top,
@@ -104,13 +111,13 @@ class Histogram extends Component {
             .style("fill", colors.barGrey)
             .style("stroke", "white");
         bars.exit().remove();
-        chart.select(".x-axis").call(xAxis);
+        chart.select(".x-axis").call(xAxis.ticks(Math.floor(width / 40)));
         this.updateMarkers();
     }
 
     render() {
         if (!this.props.data) return <div />
-        const {w, h} = this.props;
+        const {w, h} = this.state;
         return (
             <div className="viz-item">
                 <h2>Score Distribution</h2>

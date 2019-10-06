@@ -16,6 +16,7 @@ function fetchData(leagueId) {
         .catch(err => console.log(err));
 }
 
+
 class App extends Component {
 
     constructor() {
@@ -98,12 +99,12 @@ class App extends Component {
                             <Col md={6}>
                                 <Histogram data={this._histogramData()}
                                            units="Fantasy Points"
-                                           selectedTeam={this.state.teamId} w={500} h={350} />
+                                           selectedTeam={this.state.teamId} />
                             </Col>
                             <Col md={6}>
                                 <TeamBarChart data={this.state.teams.sort((a, b) => b.pointsFor - a.pointsFor)}
                                            units="Fantasy Points" pointsWins={this.state.pointsWins}
-                                           selectedTeam={this.state.teamId} w={500} h={350} />
+                                           selectedTeam={this.state.teamId} />
                             </Col>
                         </Row>
                     </Container>
