@@ -28,7 +28,6 @@ function LeagueInput(props) {
                 <Modal.Title><h2>Choose an ESPN League</h2></Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                
                 {props.errorMsg ? <Alert variant="danger">{props.errorMsg}</Alert> : null}
 
                 <FormControl
@@ -43,10 +42,12 @@ function LeagueInput(props) {
                             exampleLeagues.map(function(lg) {
                                 const { name, id } = lg;
                                 return (
-                                    <a className="league-option" href="#" key={id}
-                                       onClick={(evt) => setAndSubmit(evt, id)}>
-                                        {name} &mdash; {id}
-                                    </a>
+                                    <div key={id}>
+                                        <span className="league-option text-primary"
+                                           onClick={(evt) => setAndSubmit(evt, id)}>
+                                            {id} &mdash; {name}
+                                        </span>
+                                    </div>
                                 )
                             })
                         }

@@ -4,8 +4,8 @@
     cursor: pointer;
 }
 .league-option {
-    display: block;
     font-size: 1rem;
+    cursor: pointer;
 }
 .league-option-title {
     font-weight: bold;
