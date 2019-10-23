@@ -3,12 +3,22 @@
     margin-left: 0.5rem;
     cursor: pointer;
 }
-.league-option {
-    font-size: 1rem;
-    cursor: pointer;
-}
 .league-option-title {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
+}
+.league-option {
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid lightgrey;
+    box-shadow: 1px 1px 1px grey;
+}
+.league-option:hover {
+    box-shadow: 3px 3px 3px grey;
+}
+.league-option span {
+    display: inline-block;
 }

@@ -42,11 +42,10 @@ function LeagueInput(props) {
                             exampleLeagues.map(function(lg) {
                                 const { name, id } = lg;
                                 return (
-                                    <div key={id}>
-                                        <span className="league-option text-primary"
+                                    <div className="league-option" key={id}
                                            onClick={(evt) => setAndSubmit(evt, id)}>
-                                            {id} &mdash; {name}
-                                        </span>
+                                        <span style={{width: '25%', fontWeight: 'lighter'}}>{id}</span>
+                                        <span>{name}</span>
                                     </div>
                                 )
                             })
