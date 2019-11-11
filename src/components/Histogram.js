@@ -93,9 +93,11 @@ class Histogram extends Component {
         xScale
             .domain(extent).nice()
             .range([0, width]);
+        var bins = d3.max([10, Math.floor(values.length / 4)]);
+        bins = d3.min([15, bins]);
         const hist = d3.histogram()
             .domain(xScale.domain())
-            .thresholds(xScale.ticks(10))(values);
+            .thresholds(xScale.ticks(bins))(values);
         this.config.yScale
             .domain([0, d3.max(hist, d => d.length)]).nice()
             .range([height, 0]);
