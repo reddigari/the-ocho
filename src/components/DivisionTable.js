@@ -53,6 +53,7 @@ function StandingsTable(props) {
     return (
         <div className="viz-item">
             <h2>Standings</h2>
+            <div className="help-text">Hover over a team in the table to highlight its scores in the other graphics.</div>
             <table className="table table-responsive-md table-hover table-sm division-table">
                 <thead>
                     <tr>
